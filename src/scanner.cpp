@@ -1,6 +1,7 @@
 #include <cctype>
 #include <cstdio>
 #include <cstring>
+#include <iostream>
 #include "scanner.hpp"
 #include "token.hpp"
 
@@ -46,8 +47,8 @@ int Scanner::scan_int(char c) {
     return val;
 }
 
-int Scanner::scan(token::token *t) {
-    /* skip to the very first valid token */
+int Scanner::scan(token::Token *t) {
+    /* skip to the vnext valid token */
     char c = skip();
 
     switch (c) {
@@ -68,6 +69,7 @@ int Scanner::scan(token::token *t) {
             break;
 
         case EOF:
+            t->token = token::TokenType::EoF;
             return 0;
 
         default:

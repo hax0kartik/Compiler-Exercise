@@ -7,11 +7,13 @@ enum TokenType {
     MINUS,
     STAR,
     SLASH,
-    INTLIT
+    INTLIT,
+    EoF,
+    INVALID
 };
 
-struct token {
-    int token;
+struct Token {
+    TokenType token;
     int intValue;
 };
 

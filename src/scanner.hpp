@@ -16,7 +16,7 @@ struct Scanner {
 
     }
 
-    int scan(token::token *t);
+    int scan(token::Token *t);
 
     private:
     int next();

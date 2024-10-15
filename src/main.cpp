@@ -1,5 +1,8 @@
 #include <iostream>
 #include <cstdio>
+#include "ast.hpp"
+#include "expr.hpp"
+#include "interpret.hpp"
 #include "scanner.hpp"
 #include "token.hpp"
 
@@ -12,16 +15,10 @@ void scan_file(const char *filename) {
 
     Scanner sc(f);
 
-    token::token t;
-    const char *t_table[] {"+", "-", "*", "/", "INTLIT"};
-
-    while (sc.scan(&t)) {
-        std::cout << "Token: " << t_table[t.token];
-        if (t.token == token::TokenType::INTLIT) {
-            std::cout << ", Value: " << t.intValue;
-        }
-        std::cout << "\n";
-    }
+    ExprParser ep(&sc);
+    ast::ASTnode *ast = ep.bin_expr();
+    int res = interpret::interpret_ast(ast);
+    std::cout << "Final result: " << res << "\n";
 }
 
 int main(int argc, const char **argv) {
