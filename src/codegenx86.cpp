@@ -90,7 +90,7 @@ int CodeGen::sub(int r1, int r2) {
 }
 
 int CodeGen::mul(int r1, int r2) {
-    fprintf(outfile, "\tmulq\t%s, %s\n", reglist[r1], reglist[r2]);
+    fprintf(outfile, "\timulq\t%s, %s\n", reglist[r1], reglist[r2]);
     free_register(r1);
 
     return r2;
