@@ -16,4 +16,6 @@ struct ExprParser {
 
     private:
     ASTnode *primary(token::Token *t);
+    ASTnode *multiplicative_expr(token::Token *t);
+    ASTnode *additive_expr();
 };

@@ -24,8 +24,8 @@ static NodeType arithop(TokenType t) {
             return NodeType::INTLIT;
 
         default:
-            std::cerr << "Unknown Token type : " << TokenType::INVALID << '\n';
-            return NodeType::INVALID;
+            std::cerr << "Unknown Token type : " << t << '\n';
+            exit(1);
     }
 
     return NodeType::INVALID;
@@ -41,31 +41,70 @@ ASTnode *ExprParser::primary(Token *t) {
         
         default:
             std::cerr << "Syntax error on line: " << sc->line << " " << t->token << "\n";
+            exit(1);
     }
 
     return node;
 }
 
 ASTnode *ExprParser::bin_expr() {
+    return additive_expr();
+}
+
+ASTnode *ExprParser::multiplicative_expr(Token *t) {
     ASTnode *left {nullptr}, *right {nullptr};
-    Token t;
 
-    sc->scan(&t);
+    sc->scan(t);
+    
+    left = primary(t);
 
-    left = primary(&t);
+    sc->scan(t);
 
-    sc->scan(&t);
-
-    if (t.token == TokenType::EoF) {
+    if (t->token == TokenType::EoF) {
         return left;
     }
 
-    NodeType nt {NodeType::INVALID};
+    TokenType type {t->token};
+
+    while (type == TokenType::SLASH || type == TokenType::STAR) {
+        sc->scan(t);
+
+        right = primary(t);
+
+        sc->scan(t);
+
+        left = ASTnode::mk_ast_node(arithop(type), left, right, 0);
+
+        type = t->token;
+
+        if (type == TokenType::EoF)
+            break;
+    }
+
+    return left;
+}
+
+ASTnode *ExprParser::additive_expr() {
+    ASTnode *left {nullptr}, *right {nullptr};
+    Token t;
+
+    left = multiplicative_expr(&t);
+
+    if (t.token == TokenType::EoF)
+        return left;
+
+    TokenType type {t.token};
     
-    nt = arithop(t.token);
+    while (1) {
+        right = multiplicative_expr(&t);
 
-    /* recusrively build the right subtree */
-    right = bin_expr();
+        left = ASTnode::mk_ast_node(arithop(type), left, right, 0);
 
-    return ASTnode::mk_ast_node(nt, left, right, 0);
+        type = t.token;
+
+        if (type == TokenType::EoF)
+            break;
+    }
+
+    return left;
 }
