@@ -7,6 +7,9 @@ OBJS    :=  $(patsubst %.cpp, build/%.o, $(SOURCES))
 compiler: $(OBJS)
 	$(CXX) -o $@ $(OBJS) -I$(INCLUDES)
 
+clean:
+	rm -rf compiler build/
+
 $(OBJS) : build/%.o: %.cpp
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	$(CXX) -c $(CXXFLAGS) $< -o $@
