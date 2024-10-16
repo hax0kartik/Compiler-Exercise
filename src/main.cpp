@@ -6,6 +6,7 @@
 #include "gen.hpp"
 #include "interpret.hpp"
 #include "scanner.hpp"
+#include "stmt.hpp"
 #include "token.hpp"
 
 void scan_file(const char *filename, const char *outname) {
@@ -22,15 +23,12 @@ void scan_file(const char *filename, const char *outname) {
     }
 
     Scanner sc(f);
+    Gen *cg = new CodeGen(f2);
+    StmtParser parser(&sc, cg);
 
-    ExprParser ep(&sc);
-    ast::ASTnode *ast = ep.bin_expr();
-    int res = interpret::interpret_ast(ast);
-    std::cout << "Interpreted result: " << res << "\n";
-    
-    CodeGen codegenx86(f2);
-    Gen gen(&codegenx86);
-    gen.gen_code(ast);
+    cg->preamble();
+    parser.statements();
+    cg->postamble();
 
     fclose(f2);
     fclose(f);

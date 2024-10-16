@@ -1,5 +1,4 @@
 #pragma once
-#include <cstdio>
 #include "ast.hpp"
 #include "scanner.hpp"
 #include "token.hpp"
@@ -12,10 +11,10 @@ struct ExprParser {
     ExprParser(Scanner *_sc) : sc(_sc) {
     }
 
-    ASTnode *bin_expr();
+    ASTnode *bin_expr(token::Token *t);
 
     private:
     ASTnode *primary(token::Token *t);
     ASTnode *multiplicative_expr(token::Token *t);
-    ASTnode *additive_expr();
+    ASTnode *additive_expr(token::Token *t);
 };

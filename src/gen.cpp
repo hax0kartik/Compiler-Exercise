@@ -12,19 +12,19 @@ int Gen::gen_ast(ast::ASTnode *ast) {
 
     switch(ast->op) {
         case ast::NodeType::ADD:
-            return cg->add(leftReg, rightReg);
+            return add(leftReg, rightReg);
         
         case ast::NodeType::SUBTRACT:
-            return cg->sub(leftReg, rightReg);
+            return sub(leftReg, rightReg);
         
         case ast::NodeType::MULTIPLY:
-            return cg->mul(leftReg, rightReg);
+            return mul(leftReg, rightReg);
         
         case ast::NodeType::DIVIDE:
-            return cg->div(leftReg, rightReg);
+            return div(leftReg, rightReg);
         
         case ast::NodeType::INTLIT:
-            return cg->load_value(ast->intVal);
+            return load_value(ast->intVal);
         
         default:
             std::cerr << "Unknown AST operator\n" << ast->op;
@@ -35,8 +35,8 @@ int Gen::gen_ast(ast::ASTnode *ast) {
 void Gen::gen_code(ast::ASTnode *ast) {
     int reg {};
 
-    cg->preamble();
+    preamble();
     reg = gen_ast(ast);
-    cg->print_int(reg);
-    cg->postamble();
+    print_int(reg);
+    postamble();
 }

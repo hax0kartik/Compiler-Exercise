@@ -35,6 +35,34 @@ char Scanner::skip() {
     return c;
 }
 
+token::TokenType Scanner::keyword(const char *s) {
+    switch (*s) {
+        case 'p':
+            if (!strcmp(s, "print"))
+                return token::TokenType::PRINT;
+    }
+
+    return token::TokenType::INVALID;
+}
+
+int Scanner::scan_ident(char c, char *buf, int lim) {
+    int i = 0;
+
+    while(isalpha(c) || isdigit(c) || '_' == c) {
+        if (lim - 1 == i) {
+            std::cerr << "Identifier is too long on line" << line << "\n";
+            exit(1);
+        } else if (i < lim - 1) {
+            buf[i++] = c;
+        }
+        c = next();
+    }
+
+    putback = c;
+    buf[i] = 0;
+    return i;
+}
+
 int Scanner::scan_int(char c) {
     int k = 0, val = 0;
     
@@ -68,6 +96,10 @@ int Scanner::scan(token::Token *t) {
             t->token = token::TokenType::SLASH;
             break;
 
+        case ';':
+            t->token = token::TokenType::SEMI;
+            break;
+
         case EOF:
             t->token = token::TokenType::EoF;
             return 0;
@@ -76,8 +108,20 @@ int Scanner::scan(token::Token *t) {
             if (isdigit(c)) {
                 t->intValue = scan_int(c);
                 t->token = token::TokenType::INTLIT;
+            } else if (isalpha(c) || '_' == c) { // identifiers do not start with a number
+                scan_ident(c, last_identifier, MAX_IDENTFIER_LEN);
+                token::TokenType ty;
+                if ((ty = keyword(last_identifier)) != token::TokenType::INVALID) {
+                    t->token = ty;
+                    break;
+                }
+
+                std::cerr << "Unrecognized symbol " << last_identifier << " on line " << line << "\n";
+                exit(1);
+
             } else {
-                printf("Unknown token: %c ", c);
+                std::cout << "Unknown token: " << c;
+                exit(1);
             }
     }
 

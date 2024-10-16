@@ -8,6 +8,8 @@ enum TokenType {
     STAR,
     SLASH,
     INTLIT,
+    SEMI,
+    PRINT,
     EoF,
     INVALID
 };

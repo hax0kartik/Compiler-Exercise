@@ -1,25 +1,25 @@
 #pragma once
+#include "gen.hpp"
 #include <cstdio>
 
-struct CodeGen {
-    FILE *outfile;
+struct CodeGen : Gen {
 
-    CodeGen(FILE *_outfile) : outfile(_outfile) {
+    CodeGen(FILE *f) : Gen(f) {
+
     }
 
-    void preamble();
-    void postamble();
+    void preamble() override;
+    void postamble() override;
 
-    int load_value(int value);
-    int add(int r1, int r2);
-    int sub(int r1, int r2);
-    int mul(int r1, int r2);
-    int div(int r1, int r2);
+    int load_value(int value) override;
+    int add(int r1, int r2) override;
+    int sub(int r1, int r2) override;
+    int mul(int r1, int r2) override;
+    int div(int r1, int r2) override;
 
-    void print_int(int r);
+    void print_int(int r) override;
+    void free_registers() override;
 
-    private:
-    void free_registers();
     void free_register(int r);
     int alloc_register();
 
