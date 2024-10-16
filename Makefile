@@ -2,10 +2,13 @@ SOURCES :=  $(wildcard $(shell find src -type f -name '*.cpp'))
 INCLUDES := src/
 OBJS    :=  $(patsubst %.cpp, build/%.o, $(SOURCES))
 
-.PHONY: compiler clean
+.PHONY: compiler clean tests
 
 compiler: $(OBJS)
 	$(CXX) -o $@ $(OBJS) -I$(INCLUDES)
+
+tests:
+	@python3 ./test.py
 
 clean:
 	rm -rf compiler build/
