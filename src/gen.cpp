@@ -2,13 +2,13 @@
 #include "gen.hpp"
 #include "ast.hpp"
 
-int Gen::gen_ast(ast::ASTnode *ast) {
+int Gen::gen_ast(ast::ASTnode *ast, int reg) {
     int leftReg {0}, rightReg {0};
 
     if (ast->left)
-        leftReg = gen_ast(ast->left);
+        leftReg = gen_ast(ast->left, -1);
     if (ast->right)
-        rightReg = gen_ast(ast->right);
+        rightReg = gen_ast(ast->right, leftReg);
 
     switch(ast->op) {
         case ast::NodeType::ADD:
@@ -24,7 +24,16 @@ int Gen::gen_ast(ast::ASTnode *ast) {
             return div(leftReg, rightReg);
         
         case ast::NodeType::INTLIT:
-            return load_value(ast->intVal);
+            return load_value(ast->v.intVal);
+
+        case ast::NodeType::IDENT:
+            return load_global(symtable->symbols[ast->v.id].sym);
+
+        case ast::NodeType::LVIDENT:
+            return store_global(reg, symtable->symbols[ast->v.id].sym);
+        
+        case ast::NodeType::ASSIGN:
+            return rightReg;
         
         default:
             std::cerr << "Unknown AST operator\n" << ast->op;
@@ -36,7 +45,7 @@ void Gen::gen_code(ast::ASTnode *ast) {
     int reg {};
 
     preamble();
-    reg = gen_ast(ast);
+    reg = gen_ast(ast, -1);
     print_int(reg);
     postamble();
 }

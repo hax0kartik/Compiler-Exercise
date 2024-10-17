@@ -7,6 +7,7 @@
 #include "interpret.hpp"
 #include "scanner.hpp"
 #include "stmt.hpp"
+#include "symtable.hpp"
 #include "token.hpp"
 
 void scan_file(const char *filename, const char *outname) {
@@ -23,8 +24,9 @@ void scan_file(const char *filename, const char *outname) {
     }
 
     Scanner sc(f);
-    Gen *cg = new CodeGen(f2);
-    StmtParser parser(&sc, cg);
+    SymTable table;
+    Gen *cg = new CodeGen(f2, &table);
+    StmtParser parser(&sc, cg, &table);
 
     cg->preamble();
     parser.statements();

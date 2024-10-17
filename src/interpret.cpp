@@ -14,7 +14,7 @@ int interpret::interpret_ast(ast::ASTnode *t) {
         rightVal = interpret_ast(t->right);
 
     if (t->op == ast::NodeType::INTLIT)
-        std::cout << "int " << t->intVal << "\n";
+        std::cout << "int " << t->v.intVal << "\n";
     else
         std::cout << leftVal << " " << ASTop[t->op] << " " << rightVal << "\n";
 
@@ -32,7 +32,7 @@ int interpret::interpret_ast(ast::ASTnode *t) {
             return leftVal / rightVal;
         
         case ast::NodeType::INTLIT:
-            return t->intVal;
+            return t->v.intVal;
         
         default:
             std::cerr << "Unknown NodeType: " << t->op << "\n";

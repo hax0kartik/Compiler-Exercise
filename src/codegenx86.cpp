@@ -96,6 +96,23 @@ int CodeGen::mul(int r1, int r2) {
     return r2;
 }
 
+int CodeGen::load_global(const char *iden) {
+    int r = alloc_register();
+    fprintf(outfile, "\tmovq\t%s(\%%rip), %s\n", iden, reglist[r]);
+
+    return r;
+}
+
+int CodeGen::store_global(int r1, const char *iden) {
+    fprintf(outfile, "\tmovq\t%s, %s(\%%rip)\n", reglist[r1], iden);
+
+    return r1;
+}
+
+void CodeGen::gen_global(const char *iden) {
+    fprintf(outfile, "\t.comm\t%s,8,8\n", iden);
+}
+
 int CodeGen::div(int r1, int r2) {
     fprintf(outfile, "\tmovq\t%s, %%rax\n", reglist[r1]);
     fprintf(outfile, "\tcqo\n");

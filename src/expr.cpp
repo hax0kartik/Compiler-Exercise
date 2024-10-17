@@ -1,6 +1,7 @@
 #include <iostream>
 #include "expr.hpp"
 #include "ast.hpp"
+#include "misc.hpp"
 #include "token.hpp"
 
 using namespace ast;
@@ -33,10 +34,19 @@ static NodeType arithop(TokenType t) {
 
 ASTnode *ExprParser::primary(Token *t) {
     ASTnode *node {nullptr};
+    int id {-1};
 
     switch (t->token) {
         case TokenType::INTLIT:
             node = ASTnode::mk_ast_leaf(NodeType::INTLIT, t->intValue);
+            break;
+
+        case TokenType::IDENT:
+            id = symtable->find_sym(sc->last_identifier);
+            if (id == -1)
+                misc::fatals("Unknown variable", sc->last_identifier, sc->line);
+            
+            node = ASTnode::mk_ast_leaf(NodeType::IDENT, id);
             break;
         
         default:

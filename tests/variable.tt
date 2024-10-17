@@ -1,0 +1,13 @@
+int one;
+int two;
+int three;
+
+one = 1;
+two = 2;
+three = 3;
+
+print one - one;
+print two / two;
+print two + one;
+print one * two;
+print one * two * three;

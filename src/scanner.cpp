@@ -40,6 +40,9 @@ token::TokenType Scanner::keyword(const char *s) {
         case 'p':
             if (!strcmp(s, "print"))
                 return token::TokenType::PRINT;
+        case 'i':
+            if (!strcmp(s, "int"))
+                return token::TokenType::INT;
     }
 
     return token::TokenType::INVALID;
@@ -99,6 +102,10 @@ int Scanner::scan(token::Token *t) {
         case ';':
             t->token = token::TokenType::SEMI;
             break;
+        
+        case '=':
+            t->token = token::TokenType::ASSIGN;
+            break;
 
         case EOF:
             t->token = token::TokenType::EoF;
@@ -116,8 +123,8 @@ int Scanner::scan(token::Token *t) {
                     break;
                 }
 
-                std::cerr << "Unrecognized symbol " << last_identifier << " on line " << line << "\n";
-                exit(1);
+                t->token = token::TokenType::IDENT;
+                break;
 
             } else {
                 std::cout << "Unknown token: " << c;

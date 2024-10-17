@@ -10,6 +10,9 @@ enum TokenType {
     INTLIT,
     SEMI,
     PRINT,
+    ASSIGN,
+    IDENT,
+    INT,
     EoF,
     INVALID
 };
