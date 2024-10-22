@@ -57,62 +57,43 @@ ASTnode *ExprParser::primary(Token *t) {
     return node;
 }
 
-ASTnode *ExprParser::bin_expr(Token *t) {
-    return additive_expr(t);
+static int op_precedence(token::TokenType t) {
+    if (t == TokenType::EoF)
+        return 0;
+
+    else if (t == TokenType::PLUS || t == TokenType::MINUS)
+        return 10;
+
+    else if (t == TokenType::STAR || t == TokenType::SLASH)
+        return 20;
+
+    else if (t == TokenType::EQ || t == TokenType::NE)
+        return 30;
+
+    else
+        return 40;
 }
 
-ASTnode *ExprParser::multiplicative_expr(Token *t) {
+ASTnode *ExprParser::bin_expr(Token *t, int ptp) {
     ASTnode *left {nullptr}, *right {nullptr};
 
     sc->scan(t);
-    
     left = primary(t);
 
     sc->scan(t);
 
-    if (t->token == TokenType::SEMI) {
-        return left;
-    }
-
-    TokenType type {t->token};
-
-    while (type == TokenType::SLASH || type == TokenType::STAR) {
-        sc->scan(t);
-
-        right = primary(t);
-
-        sc->scan(t);
-
-        left = ASTnode::mk_ast_node(arithop(type), left, right, 0);
-
-        type = t->token;
-
-        if (type == TokenType::SEMI)
-            break;
-    }
-
-    return left;
-}
-
-ASTnode *ExprParser::additive_expr(Token *t) {
-    ASTnode *left {nullptr}, *right {nullptr};
-
-    left = multiplicative_expr(t);
-
-    if (t->token == TokenType::SEMI)
+    TokenType ty = t->token;
+    if (ty == TokenType::SEMI)
         return left;
 
-    TokenType type {t->token};
-    
-    while (1) {
-        right = multiplicative_expr(t);
+    while (op_precedence(ty) > ptp) {
+        right = bin_expr(t, op_precedence(t->token));
 
-        left = ASTnode::mk_ast_node(arithop(type), left, right, 0);
+        left = ASTnode::mk_ast_node(arithop(ty), left, right, 0);
 
-        type = t->token;
-
-        if (type == TokenType::SEMI)
-            break;
+        ty = t->token;
+        if (t->token == token::TokenType::SEMI)
+            return left;
     }
 
     return left;

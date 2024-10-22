@@ -3,6 +3,7 @@
 #include <cstring>
 #include <iostream>
 #include "scanner.hpp"
+#include "misc.hpp"
 #include "token.hpp"
 
 static int chrpos(const char *str, char c) {
@@ -104,8 +105,36 @@ int Scanner::scan(token::Token *t) {
             break;
         
         case '=':
-            t->token = token::TokenType::ASSIGN;
+            if ((c = next()) == '=')
+                t->token = token::TokenType::EQ;
+            else { 
+                t->token = token::TokenType::ASSIGN;
+                putback = c;
+            }
             break;
+        
+        case '!':
+            if ((c = next()) == '=') {
+                t->token = token::TokenType::NE;
+            } else {
+                misc::fatalc("Unrecognized character", c, line);
+            }
+        
+        case '<':
+            if ((c = next()) == '=') {
+                t->token = token::TokenType::LE;
+            } else {
+                t->token = token::TokenType::LT;
+                putback = c;
+            }
+
+        case '>':
+            if ((c = next()) == '=') {
+                t->token = token::TokenType::GE;
+            } else {
+                t->token = token::TokenType::GT;
+                putback = c;
+            }
 
         case EOF:
             t->token = token::TokenType::EoF;

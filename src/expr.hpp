@@ -14,10 +14,8 @@ struct ExprParser {
      : sc(_sc), symtable(_sym) {
     }
 
-    ASTnode *bin_expr(token::Token *t);
+    ASTnode *bin_expr(token::Token *t, int ptp = 0);
 
     private:
     ASTnode *primary(token::Token *t);
-    ASTnode *multiplicative_expr(token::Token *t);
-    ASTnode *additive_expr(token::Token *t);
 };

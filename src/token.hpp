@@ -7,12 +7,22 @@ enum TokenType {
     MINUS,
     STAR,
     SLASH,
+
+    EQ,
+    NE,
+    LT,
+    GT,
+    LE,
+    GE,
+
     INTLIT,
     SEMI,
-    PRINT,
     ASSIGN,
     IDENT,
+    
+    PRINT,
     INT,
+
     EoF,
     INVALID
 };
