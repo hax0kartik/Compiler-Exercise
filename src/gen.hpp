@@ -24,6 +24,14 @@ struct Gen {
     virtual int sub(int r1, int r2) = 0;
     virtual int mul(int r1, int r2) = 0;
     virtual int div(int r1, int r2) = 0;
+
+    virtual int eq(int r1, int r2) = 0;
+    virtual int ne(int r1, int r2) = 0;
+    virtual int lt(int r1, int r2) = 0;
+    virtual int gt(int r1, int r2) = 0;
+    virtual int le(int r1, int r2) = 0;
+    virtual int ge(int r1, int r2) = 0;
+
     virtual void preamble() = 0;
     virtual void postamble() = 0;
     virtual void free_registers() = 0;

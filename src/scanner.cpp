@@ -119,6 +119,7 @@ int Scanner::scan(token::Token *t) {
             } else {
                 misc::fatalc("Unrecognized character", c, line);
             }
+            break;
         
         case '<':
             if ((c = next()) == '=') {
@@ -127,6 +128,7 @@ int Scanner::scan(token::Token *t) {
                 t->token = token::TokenType::LT;
                 putback = c;
             }
+            break;
 
         case '>':
             if ((c = next()) == '=') {
@@ -135,6 +137,7 @@ int Scanner::scan(token::Token *t) {
                 t->token = token::TokenType::GT;
                 putback = c;
             }
+            break;
 
         case EOF:
             t->token = token::TokenType::EoF;

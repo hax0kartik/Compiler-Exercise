@@ -3,6 +3,7 @@
 #include "codegenx86.hpp"
 
 static const char *reglist[] {"%r8", "%r9", "%r10", "%r11"};
+static const char *breglist[] {"%r8b", "%r9b", "%r10b", "%r11b"};
 
 void CodeGen::free_registers() {
     freeRegs[0] = freeRegs[1] = freeRegs[2] = freeRegs[3] = 1;
@@ -128,3 +129,37 @@ void CodeGen::print_int(int r) {
     fprintf(outfile, "\tcall\tprint_int\n");
     free_register(r);
 }
+
+int CodeGen::compare(int r1, int r2, const char *how) {
+    fprintf(outfile, "\tcmpq\t%s, %s\n", reglist[r2], reglist[r1]);
+    fprintf(outfile, "\t%s\t%s\n", how, breglist[r2]);
+    fprintf(outfile, "\tandq\t$255,%s\n", reglist[r2]);
+    free_register(r1);
+
+    return r2;
+}
+
+int CodeGen::eq(int r1, int r2) {
+    return compare(r1, r2, "sete");
+}
+
+int CodeGen::ne(int r1, int r2) {
+    return compare(r1, r2, "setne");
+}
+
+int CodeGen::lt(int r1, int r2) {
+    return compare(r1, r2, "setl");
+}
+
+int CodeGen::gt(int r1, int r2) {
+    return compare(r1, r2, "setg");
+}
+
+int CodeGen::le(int r1, int r2) {
+    return compare(r1, r2, "setle");
+}
+
+int CodeGen::ge(int r1, int r2) {
+    return compare(r1, r2, "setge");
+}
+

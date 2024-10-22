@@ -24,6 +24,24 @@ static NodeType arithop(TokenType t) {
         case TokenType::INTLIT:
             return NodeType::INTLIT;
 
+        case TokenType::EQ:
+            return NodeType::EQ;
+
+        case TokenType::NE:
+            return NodeType::NE;
+        
+        case TokenType::GE:
+            return NodeType::GE;
+        
+        case TokenType::GT:
+            return NodeType::GT;
+
+        case TokenType::LE:
+            return NodeType::LE;
+        
+        case TokenType::LT:
+            return NodeType::LT;
+
         default:
             std::cerr << "Unknown Token type : " << t << '\n';
             exit(1);

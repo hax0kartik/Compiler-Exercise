@@ -18,6 +18,13 @@ struct CodeGen : Gen {
     int mul(int r1, int r2) override;
     int div(int r1, int r2) override;
 
+    int eq(int r1, int r2) override;
+    int ne(int r1, int r2) override;
+    int lt(int r1, int r2) override;
+    int gt(int r1, int r2) override;
+    int le(int r1, int r2) override;
+    int ge(int r1, int r2) override;
+
     int store_global(int r, const char *iden) override;
     int load_global(const char *iden) override;
     void gen_global(const char *iden) override;
@@ -27,6 +34,8 @@ struct CodeGen : Gen {
 
     void free_register(int r);
     int alloc_register();
+
+    int compare(int r1, int r2, const char *how);
 
     int freeRegs[4] {};
 };

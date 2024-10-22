@@ -34,6 +34,24 @@ int Gen::gen_ast(ast::ASTnode *ast, int reg) {
         
         case ast::NodeType::ASSIGN:
             return rightReg;
+
+        case ast::NodeType::EQ:
+            return eq(leftReg, rightReg);
+
+        case ast::NodeType::NE:
+            return ne(leftReg, rightReg);
+
+        case ast::NodeType::LT:
+            return lt(leftReg, rightReg);
+        
+        case ast::NodeType::LE:
+            return le(leftReg, rightReg);
+        
+        case ast::NodeType::GT:
+            return gt(leftReg, rightReg);
+
+        case ast::NodeType::GE:
+            return ge(leftReg, rightReg);
         
         default:
             std::cerr << "Unknown AST operator\n" << ast->op;

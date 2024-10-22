@@ -7,10 +7,20 @@ enum NodeType {
     SUBTRACT,
     MULTIPLY,
     DIVIDE,
+
+    EQ,
+    NE,
+    LT,
+    GT,
+    LE,
+    GE,
+
     INTLIT,
+    
     IDENT,
     LVIDENT,
     ASSIGN,
+
     INVALID
 };
 

@@ -10,8 +10,8 @@ for test_file in test_files:
     print("---/ File Contents /---")
     print(file)
 
+    print("---/ Compilation proces /---") 
     initial_res = os.popen(f"./compiler {test_file} out.s").read()
-    print("---/ Compilation proces /---")
     print(initial_res)
 
     print("---/ Generated code /---")
